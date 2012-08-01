@@ -77,8 +77,6 @@
 	 * @static
 	 */
 	HTMLAudioPlugin.isSupported = function() {
-		if (SoundJS.BrowserDetect.isIOS) { return false; }
-
 		HTMLAudioPlugin.generateCapabilities();
 		var t = HTMLAudioPlugin.tag;
 		if (t == null || t.canPlayType == null) { return false; }
@@ -350,7 +348,6 @@
 
 		handleSoundStalled: function(event) {
 			if (this.onPlayFailed != null) { this.onPlayFailed(this); }
-			this.cleanUp();
 		},
 
 		handleSoundReady: function(event) {
@@ -614,8 +611,8 @@
 				this.tags.push(tag);
 			}
 
-				document.body.removeChild(tag);
-
+			try { document.body.removeChild(tag); } catch(error) {}
+			
 			this.available = this.tags.length;
 		},
 
